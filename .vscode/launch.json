@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Go Program",
+            "type": "go",
+            "request": "launch",
+            "program": "${workspaceFolder}/cmd/app/main.go",
+            "args": ["solve", "--algorithm=astar", "--file=/tests/cases/4_check_maze_solving/maze.txt", "--start=1,1", "--end=9,9", "--output=/tests/tmp/4_check_maze_solving.txt"],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

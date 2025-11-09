@@ -26,3 +26,11 @@ go.work.sum
 *.env
 
 bin
+
+maze1.txt
+
+solution_maze2.txt
+
+coverage.txt
+coverage.html
+
