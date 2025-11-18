@@ -5,10 +5,11 @@ import (
 	"os"
 
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/domain"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/parsers"
 )
 
-func Run(input *InputParams, r Reader, w Writer, rand Random) error {
-	switch input.cmd {
+func Run(input *parsers.InputParams, r Reader, w Writer, rand Random) error {
+	switch input.Cmd {
 	case "generate":
 		if err := generateMaze(input, w, rand); err != nil {
 			return err
@@ -24,22 +25,22 @@ func Run(input *InputParams, r Reader, w Writer, rand Random) error {
 }
 
 // Generator --------------------------------------------------------------------------------------------------
-func generateMaze(input *InputParams, w Writer, rand Random) error {
+func generateMaze(input *parsers.InputParams, w Writer, rand Random) error {
 	g := makeGenerator(input, rand)
 	if g == nil {
-		return fmt.Errorf("no such algorithm for generator: %s", input.algorithm)
+		return fmt.Errorf("no such algorithm for generator: %s", input.Algorithm)
 	}
-	maze := g.Generate(input.height, input.width)
+	maze := g.Generate(input.Height, input.Width)
 
-	if err := w.PrintMaze(input.output, os.Stdout, maze); err != nil {
+	if err := w.PrintMaze(input.Output, os.Stdout, maze); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func makeGenerator(input *InputParams, rand Random) domain.Generator {
-	switch input.algorithm {
+func makeGenerator(input *parsers.InputParams, rand Random) domain.Generator {
+	switch input.Algorithm {
 	case "dfs":
 		return &DFS{rnd: rand}
 	case "prim":
@@ -50,13 +51,13 @@ func makeGenerator(input *InputParams, rand Random) domain.Generator {
 }
 
 // Solver --------------------------------------------------------------------------------------------------
-func solveMaze(input *InputParams, w Writer, r Reader) error {
+func solveMaze(input *parsers.InputParams, w Writer, r Reader) error {
 	s := makeSolver(input)
 	if s == nil {
-		return fmt.Errorf("no such algorithm for solver: %s", input.algorithm)
+		return fmt.Errorf("no such algorithm for solver: %s", input.Algorithm)
 	}
 
-	maze, err := r.GetMazeFromFile(input.mazeFile)
+	maze, err := r.GetMazeFromFile(input.MazeFile)
 	if err != nil {
 		return err
 	}
@@ -64,29 +65,29 @@ func solveMaze(input *InputParams, w Writer, r Reader) error {
 	width, height := (maze.GetWidth()-1)/2, (maze.GetHeight()-1)/2 // чтобы формат вывода точек
 	// и размеров был ожидаем для пользователя, он же не знает о фокусах с удвоением размера лабиринта
 
-	if !(input.startPoint.Row < 2*height+1 &&
-		input.startPoint.Col < 2*width+1) {
+	if !(input.StartPoint.Row < 2*height+1 &&
+		input.StartPoint.Col < 2*width+1) {
 		return fmt.Errorf("startPoint is out of bounds: %d,%d in shape (rows=%d, cols=%d) (0-index)",
-			(input.startPoint.Row-1)/2, (input.startPoint.Col-1)/2, height, width) // аналогично
+			(input.StartPoint.Row-1)/2, (input.StartPoint.Col-1)/2, height, width) // аналогично
 	}
 
-	if !(input.endPoint.Row < 2*height+1 &&
-		input.endPoint.Col < 2*width+1) {
+	if !(input.EndPoint.Row < 2*height+1 &&
+		input.EndPoint.Col < 2*width+1) {
 		return fmt.Errorf("endPoint is out of bounds: %d,%d in shape (rows=%d, cols=%d) (0-index)",
-			(input.endPoint.Row-1)/2, (input.endPoint.Col-1)/2, height, width) // аналогично
+			(input.EndPoint.Row-1)/2, (input.EndPoint.Col-1)/2, height, width) // аналогично
 	}
 
-	path := s.Solve(maze, input.startPoint, input.endPoint)
+	path := s.Solve(maze, input.StartPoint, input.EndPoint)
 
-	if err := w.PrintPath(input.output, path, maze); err != nil {
+	if err := w.PrintPath(input.Output, path, maze); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func makeSolver(input *InputParams) domain.Solver {
-	switch input.algorithm {
+func makeSolver(input *parsers.InputParams) domain.Solver {
+	switch input.Algorithm {
 	case "astar":
 		return &AStar{}
 	case "dijkstra":

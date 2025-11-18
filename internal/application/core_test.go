@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/domain"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/parsers"
 )
 
 type fakeReader struct {
@@ -44,7 +45,7 @@ func TestRun(t *testing.T) {
 
 	tests := []struct {
 		name            string
-		input           *InputParams
+		input           *parsers.InputParams
 		rand            *fakeRandom
 		reader          *fakeReader
 		writer          *fakeWriter
@@ -55,7 +56,7 @@ func TestRun(t *testing.T) {
 	}{
 		{
 			name:            "generate-dfs",
-			input:           &InputParams{cmd: "generate", algorithm: "dfs", height: 5, width: 5, output: "out"},
+			input:           &parsers.InputParams{Cmd: "generate", Algorithm: "dfs", Height: 5, Width: 5, Output: "out"},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(42))},
 			reader:          &fakeReader{false},
 			writer:          &fakeWriter{false, false},
@@ -66,7 +67,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name:            "generate-prim",
-			input:           &InputParams{cmd: "generate", algorithm: "prim", height: 6, width: 6, output: "out"},
+			input:           &parsers.InputParams{Cmd: "generate", Algorithm: "prim", Height: 6, Width: 6, Output: "out"},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(7))},
 			reader:          &fakeReader{false},
 			writer:          &fakeWriter{false, false},
@@ -77,7 +78,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name:            "generate-bad-algo",
-			input:           &InputParams{cmd: "generate", algorithm: "boom", height: 5, width: 5},
+			input:           &parsers.InputParams{Cmd: "generate", Algorithm: "boom", Height: 5, Width: 5},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(1))},
 			reader:          &fakeReader{false},
 			writer:          &fakeWriter{false, false},
@@ -88,7 +89,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name:            "generate-small",
-			input:           &InputParams{cmd: "generate", algorithm: "dfs", height: 1, width: 1},
+			input:           &parsers.InputParams{Cmd: "generate", Algorithm: "dfs", Height: 1, Width: 1},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(123))},
 			reader:          &fakeReader{false},
 			writer:          &fakeWriter{false, false},
@@ -99,12 +100,12 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "solve-astar-valid",
-			input: &InputParams{
-				cmd:        "solve",
-				algorithm:  "astar",
-				mazeFile:   "testdata/maze_small.txt",
-				startPoint: domain.NewCell(1, 1),
-				endPoint:   domain.NewCell(3, 3),
+			input: &parsers.InputParams{
+				Cmd:        "solve",
+				Algorithm:  "astar",
+				MazeFile:   "testdata/maze_small.txt",
+				StartPoint: domain.NewCell(1, 1),
+				EndPoint:   domain.NewCell(3, 3),
 			},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(42))},
 			reader:          &fakeReader{false},
@@ -116,12 +117,12 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "solve_invalid_algorithm",
-			input: &InputParams{
-				cmd:        "solve",
-				algorithm:  "invalid",
-				mazeFile:   "testdata/maze_small.txt",
-				startPoint: domain.NewCell(1, 1),
-				endPoint:   domain.NewCell(3, 3),
+			input: &parsers.InputParams{
+				Cmd:        "solve",
+				Algorithm:  "invalid",
+				MazeFile:   "testdata/maze_small.txt",
+				StartPoint: domain.NewCell(1, 1),
+				EndPoint:   domain.NewCell(3, 3),
 			},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(42))},
 			reader:          &fakeReader{false},
@@ -133,12 +134,12 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "solve-dijkstra-valid",
-			input: &InputParams{
-				cmd:        "solve",
-				algorithm:  "dijkstra",
-				mazeFile:   "testdata/maze_small.txt",
-				startPoint: domain.NewCell(1, 1),
-				endPoint:   domain.NewCell(3, 3),
+			input: &parsers.InputParams{
+				Cmd:        "solve",
+				Algorithm:  "dijkstra",
+				MazeFile:   "testdata/maze_small.txt",
+				StartPoint: domain.NewCell(1, 1),
+				EndPoint:   domain.NewCell(3, 3),
 			},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(99))},
 			reader:          &fakeReader{false},
@@ -150,12 +151,12 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "solve-start-oob",
-			input: &InputParams{
-				cmd:        "solve",
-				algorithm:  "astar",
-				mazeFile:   "testdata/maze_small.txt",
-				startPoint: domain.NewCell(999, 999),
-				endPoint:   domain.NewCell(3, 3),
+			input: &parsers.InputParams{
+				Cmd:        "solve",
+				Algorithm:  "astar",
+				MazeFile:   "testdata/maze_small.txt",
+				StartPoint: domain.NewCell(999, 999),
+				EndPoint:   domain.NewCell(3, 3),
 			},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(3))},
 			reader:          &fakeReader{false},
@@ -167,12 +168,12 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "solve-end-oob",
-			input: &InputParams{
-				cmd:        "solve",
-				algorithm:  "astar",
-				mazeFile:   "testdata/maze1.txt",
-				startPoint: domain.NewCell(1, 1),
-				endPoint:   domain.NewCell(999, 999),
+			input: &parsers.InputParams{
+				Cmd:        "solve",
+				Algorithm:  "astar",
+				MazeFile:   "testdata/maze1.txt",
+				StartPoint: domain.NewCell(1, 1),
+				EndPoint:   domain.NewCell(999, 999),
 			},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(4))},
 			reader:          &fakeReader{false},
@@ -184,7 +185,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name:            "unknown-command",
-			input:           &InputParams{cmd: "foobar"},
+			input:           &parsers.InputParams{Cmd: "foobar"},
 			rand:            &fakeRandom{r: rand.New(rand.NewSource(5))},
 			reader:          &fakeReader{false},
 			writer:          &fakeWriter{false, false},

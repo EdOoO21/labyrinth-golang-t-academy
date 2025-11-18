@@ -6,6 +6,7 @@ import (
 
 	app "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/application"
 	inf "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/infrastructure"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/parsers"
 )
 
 func main() {
@@ -16,14 +17,14 @@ func main() {
 	r := &inf.ConsoleReader{}
 	w := &inf.ConsoleWriter{}
 	rand := &inf.RandomNumber{}
-	input := &app.InputParams{}
+	input := &parsers.InputParams{}
 
 	switch os.Args[1] {
 	case "generate":
-		exitOnError(app.GeneratorParseFlags(input, os.Args[2:]))
+		exitOnError(parsers.GeneratorParseFlags(input, os.Args[2:]))
 
 	case "solve":
-		exitOnError(app.SolverParseFlags(input, os.Args[2:]))
+		exitOnError(parsers.SolverParseFlags(input, os.Args[2:]))
 
 	case "--help":
 		inf.Helper()

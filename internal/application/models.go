@@ -6,12 +6,6 @@ import (
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/domain"
 )
 
-type InputParams struct {
-	width, height                    int
-	cmd, algorithm, mazeFile, output string
-	startPoint, endPoint             domain.Cell
-}
-
 type DFS struct {
 	rnd Random
 }

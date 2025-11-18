@@ -1,4 +1,4 @@
-package application
+package parsers
 
 import (
 	"fmt"
@@ -20,11 +20,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-h", "5", "-a", "dfs"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     0,
-				height:    5,
-				algorithm: "dfs",
-				output:    "",
+				Cmd:       "generate",
+				Width:     0,
+				Height:    5,
+				Algorithm: "dfs",
+				Output:    "",
 			},
 			err: fmt.Errorf("--width=%d is not entered or is invalid: enter integer >0", 0),
 		},
@@ -33,11 +33,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-w", "5", "-a", "prim"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     5,
-				height:    0,
-				algorithm: "prim",
-				output:    "",
+				Cmd:       "generate",
+				Width:     5,
+				Height:    0,
+				Algorithm: "prim",
+				Output:    "",
 			},
 			err: fmt.Errorf("--height=%d is not entered or is invalid: enter integer >0", 0),
 		},
@@ -46,11 +46,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "dfs", "-w", "-22", "-h", "23"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     -22,
-				height:    23,
-				algorithm: "dfs",
-				output:    "",
+				Cmd:       "generate",
+				Width:     -22,
+				Height:    23,
+				Algorithm: "dfs",
+				Output:    "",
 			},
 			err: fmt.Errorf("--width=%d is not entered or is invalid: enter integer >0", -22),
 		},
@@ -59,11 +59,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "prim", "-w", "12", "-h", "-2"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     12,
-				height:    -2,
-				algorithm: "prim",
-				output:    "",
+				Cmd:       "generate",
+				Width:     12,
+				Height:    -2,
+				Algorithm: "prim",
+				Output:    "",
 			},
 			err: fmt.Errorf("--height=%d is not entered or is invalid: enter integer >0", -2),
 		},
@@ -72,11 +72,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-w", "5", "-h", "5"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     5,
-				height:    5,
-				algorithm: "",
-				output:    "",
+				Cmd:       "generate",
+				Width:     5,
+				Height:    5,
+				Algorithm: "",
+				Output:    "",
 			},
 			err: fmt.Errorf("--algorithm is empty: enter valid name"),
 		},
@@ -85,11 +85,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"--width", "3", "--height", "3", "--algorithm", "dfs", "--output", "out.txt"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     3,
-				height:    3,
-				algorithm: "dfs",
-				output:    "out.txt",
+				Cmd:       "generate",
+				Width:     3,
+				Height:    3,
+				Algorithm: "dfs",
+				Output:    "out.txt",
 			},
 			err: nil,
 		},
@@ -98,11 +98,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-w", "2", "-h", "2", "-a", "prim", "-o", "f"},
 			expected: &InputParams{
-				cmd:       "generate",
-				width:     2,
-				height:    2,
-				algorithm: "prim",
-				output:    "f",
+				Cmd:       "generate",
+				Width:     2,
+				Height:    2,
+				Algorithm: "prim",
+				Output:    "f",
 			},
 			err: nil,
 		},
@@ -129,11 +129,11 @@ func TestGeneratorParseFlags(t *testing.T) {
 				got := tc.input
 				want := tc.expected
 
-				if got.cmd != want.cmd ||
-					got.width != want.width ||
-					got.height != want.height ||
-					got.algorithm != want.algorithm ||
-					got.output != want.output {
+				if got.Cmd != want.Cmd ||
+					got.Width != want.Width ||
+					got.Height != want.Height ||
+					got.Algorithm != want.Algorithm ||
+					got.Output != want.Output {
 					t.Fatalf("unexpected parsed input\ngot:  %+v\nwant: %+v", got, want)
 				}
 			} else if (tc.expected == nil) != (tc.input == nil) {
@@ -157,12 +157,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-f", "maze.txt", "-s", "0,0", "-e", "1,1"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "",
-				mazeFile:   "maze.txt",
-				output:     "",
-				startPoint: domain.NewCell(0, 0),
-				endPoint:   domain.NewCell(0, 0),
+				Cmd:        "solve",
+				Algorithm:  "",
+				MazeFile:   "maze.txt",
+				Output:     "",
+				StartPoint: domain.NewCell(0, 0),
+				EndPoint:   domain.NewCell(0, 0),
 			},
 			err: fmt.Errorf("--algorithm is empty: enter valid name"),
 		},
@@ -171,12 +171,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "dijkstra", "-s", "0,0", "-e", "1,1"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "dijkstra",
-				mazeFile:   "",
-				output:     "",
-				startPoint: domain.NewCell(0, 0),
-				endPoint:   domain.NewCell(0, 0),
+				Cmd:        "solve",
+				Algorithm:  "dijkstra",
+				MazeFile:   "",
+				Output:     "",
+				StartPoint: domain.NewCell(0, 0),
+				EndPoint:   domain.NewCell(0, 0),
 			},
 			err: fmt.Errorf("--file is empty: enter valid name"),
 		},
@@ -185,12 +185,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "dijkstra", "-f", "m", "-s", "-12,321", "-e", "1,1"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "dijkstra",
-				mazeFile:   "m",
-				output:     "",
-				startPoint: domain.NewCell(0, 0),
-				endPoint:   domain.NewCell(0, 0),
+				Cmd:        "solve",
+				Algorithm:  "dijkstra",
+				MazeFile:   "m",
+				Output:     "",
+				StartPoint: domain.NewCell(0, 0),
+				EndPoint:   domain.NewCell(0, 0),
 			},
 			err: fmt.Errorf("invalid point format: %s is invalid value", "(-12,321)"),
 		},
@@ -199,12 +199,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "dijkstra", "-f", "m", "-s", "11,321", "-e", "-1,21"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "dijkstra",
-				mazeFile:   "m",
-				output:     "",
-				startPoint: domain.NewCell(11, 321),
-				endPoint:   domain.NewCell(0, 0),
+				Cmd:        "solve",
+				Algorithm:  "dijkstra",
+				MazeFile:   "m",
+				Output:     "",
+				StartPoint: domain.NewCell(11, 321),
+				EndPoint:   domain.NewCell(0, 0),
 			},
 			err: fmt.Errorf("invalid point format: %s is invalid value", "(-1,21)"),
 		},
@@ -213,12 +213,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "dijkstra", "-f", "m", "-s", "-1,0", "-e", "1,1"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "dijkstra",
-				mazeFile:   "m",
-				output:     "",
-				startPoint: domain.NewCell(0, 0),
-				endPoint:   domain.NewCell(0, 0),
+				Cmd:        "solve",
+				Algorithm:  "dijkstra",
+				MazeFile:   "m",
+				Output:     "",
+				StartPoint: domain.NewCell(0, 0),
+				EndPoint:   domain.NewCell(0, 0),
 			},
 			err: fmt.Errorf("invalid point format: (%d,%d) is invalid value", -1, 0),
 		},
@@ -227,12 +227,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-a", "astar", "-f", "m", "-s", "0,0", "-e", "1,1"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "astar",
-				mazeFile:   "m",
-				output:     "",
-				startPoint: domain.NewCell(1, 1),
-				endPoint:   domain.NewCell(3, 3),
+				Cmd:        "solve",
+				Algorithm:  "astar",
+				MazeFile:   "m",
+				Output:     "",
+				StartPoint: domain.NewCell(1, 1),
+				EndPoint:   domain.NewCell(3, 3),
 			},
 			err: nil,
 		},
@@ -241,12 +241,12 @@ func TestSolverParseFlags(t *testing.T) {
 			input: &InputParams{},
 			args:  []string{"-o", "file", "-a", "dijkstra", "-f", "m", "-s", "2,44", "-e", "33,2113"},
 			expected: &InputParams{
-				cmd:        "solve",
-				algorithm:  "dijkstra",
-				mazeFile:   "m",
-				output:     "file",
-				startPoint: domain.NewCell(2, 44),
-				endPoint:   domain.NewCell(33, 2113),
+				Cmd:        "solve",
+				Algorithm:  "dijkstra",
+				MazeFile:   "m",
+				Output:     "file",
+				StartPoint: domain.NewCell(2, 44),
+				EndPoint:   domain.NewCell(33, 2113),
 			},
 			err: nil,
 		},
@@ -273,11 +273,11 @@ func TestSolverParseFlags(t *testing.T) {
 				got := tc.input
 				want := tc.expected
 
-				if got.cmd != want.cmd ||
-					got.width != want.width ||
-					got.height != want.height ||
-					got.algorithm != want.algorithm ||
-					got.output != want.output {
+				if got.Cmd != want.Cmd ||
+					got.Width != want.Width ||
+					got.Height != want.Height ||
+					got.Algorithm != want.Algorithm ||
+					got.Output != want.Output {
 					t.Fatalf("unexpected parsed input\ngot:  %+v\nwant: %+v", got, want)
 				}
 			} else if (tc.expected == nil) != (tc.input == nil) {

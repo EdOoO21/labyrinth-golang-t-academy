@@ -1,4 +1,4 @@
-package application
+package parsers
 
 import (
 	"fmt"
@@ -21,21 +21,21 @@ func GeneratorParseFlags(input *InputParams, args []string) error {
 		return err
 	}
 
-	input.cmd = "generate"
-	input.width = *width
-	input.height = *height
-	input.algorithm = *algo
-	input.output = *output
+	input.Cmd = "generate"
+	input.Width = *width
+	input.Height = *height
+	input.Algorithm = *algo
+	input.Output = *output
 
-	if input.width <= 0 {
-		return fmt.Errorf("--width=%d is not entered or is invalid: enter integer >0", input.width)
+	if input.Width <= 0 {
+		return fmt.Errorf("--width=%d is not entered or is invalid: enter integer >0", input.Width)
 	}
 
-	if input.height <= 0 {
-		return fmt.Errorf("--height=%d is not entered or is invalid: enter integer >0", input.height)
+	if input.Height <= 0 {
+		return fmt.Errorf("--height=%d is not entered or is invalid: enter integer >0", input.Height)
 	}
 
-	if input.algorithm == "" {
+	if input.Algorithm == "" {
 		return fmt.Errorf("--algorithm is empty: enter valid name")
 	}
 
@@ -55,16 +55,16 @@ func SolverParseFlags(input *InputParams, args []string) error {
 		return err
 	}
 
-	input.cmd = "solve"
-	input.algorithm = *algo
-	input.mazeFile = *mazeFile
-	input.output = *output
+	input.Cmd = "solve"
+	input.Algorithm = *algo
+	input.MazeFile = *mazeFile
+	input.Output = *output
 
-	if input.algorithm == "" {
+	if input.Algorithm == "" {
 		return fmt.Errorf("--algorithm is empty: enter valid name")
 	}
 
-	if input.mazeFile == "" {
+	if input.MazeFile == "" {
 		return fmt.Errorf("--file is empty: enter valid name")
 	}
 
@@ -72,13 +72,13 @@ func SolverParseFlags(input *InputParams, args []string) error {
 	if err != nil {
 		return fmt.Errorf("invalid point format: %w", err)
 	}
-	input.startPoint = domain.NewCell(x, y)
+	input.StartPoint = domain.NewCell(x, y)
 
 	x, y, err = parseInputPoint(*endStr)
 	if err != nil {
 		return fmt.Errorf("invalid point format: %w", err)
 	}
-	input.endPoint = domain.NewCell(x, y)
+	input.EndPoint = domain.NewCell(x, y)
 
 	return nil
 }
