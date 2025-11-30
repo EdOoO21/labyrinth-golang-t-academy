@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	app "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/application"
-	inf "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/infrastructure"
-	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/parsers"
+	app "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/application/core"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/infrastructure/parsers"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/infrastructure/random"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/infrastructure/reader"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw2-labyrinths/internal/infrastructure/writer"
 )
 
 func main() {
@@ -14,9 +16,9 @@ func main() {
 		fmt.Println("not enough arguments: enter generate or solve")
 		os.Exit(1)
 	}
-	r := &inf.ConsoleReader{}
-	w := &inf.ConsoleWriter{}
-	rand := &inf.RandomNumber{}
+	r := &reader.ConsoleReader{}
+	w := &writer.ConsoleWriter{}
+	rand := &random.RandomNumber{}
 	input := &parsers.InputParams{}
 
 	switch os.Args[1] {
@@ -27,7 +29,7 @@ func main() {
 		exitOnError(parsers.SolverParseFlags(input, os.Args[2:]))
 
 	case "--help":
-		inf.Helper()
+		writer.Helper()
 		os.Exit(0)
 	default:
 		fmt.Println("incorrect first argument: should be generate or solve")
@@ -41,10 +43,5 @@ func exitOnError(err error) {
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(0)
-		// было exit(1), но из-за того,
-		// что после Exit(1) выводится в терминал exit status 1
-		// не проходили тесты blackbox, поэтому пришлось написать так
-		// кажется, что изначально было норм решение при ошибки завершать с кодом 1
-		// было бы супер если будет фидбек по этому поводу
 	}
 }
